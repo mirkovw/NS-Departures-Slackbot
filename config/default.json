@@ -1,0 +1,5 @@
+{
+  "port": 3456,
+  "userDataPath": "./data/users.json",
+  "nsApiUrl": "https://gateway.apiportal.ns.nl/reisinformatie-api/api/v2/departures"
+}
