@@ -62,12 +62,12 @@ function () {
           case 0:
             _context.prev = 0;
             _context.next = 3;
-            return _axios["default"].get(_config["default"].get('ns_api_url'), {
+            return _axios["default"].get(_config["default"].get('nsApiUrl'), {
               params: {
                 station: station.tpa
               },
               headers: {
-                'Ocp-Apim-Subscription-Key': _config["default"].get('ns.api_key')
+                'Ocp-Apim-Subscription-Key': _config["default"].get('ns.apiKey')
               }
             });
 
