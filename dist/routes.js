@@ -32,7 +32,7 @@ function () {
   var _ref = _asyncToGenerator(
   /*#__PURE__*/
   regeneratorRuntime.mark(function _callee(req, res) {
-    var payload;
+    var payload, response;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -43,22 +43,23 @@ function () {
             return (0, _utils2.handleCommand)(payload);
 
           case 4:
-            return _context.abrupt("return", res.status(200).json());
+            response = _context.sent;
+            return _context.abrupt("return", res.status(200).send(response));
 
-          case 7:
-            _context.prev = 7;
+          case 8:
+            _context.prev = 8;
             _context.t0 = _context["catch"](0);
 
             _utils.log.error(_context.t0);
 
             return _context.abrupt("return", res.status(500).send('Something blew up. We\'re looking into it.'));
 
-          case 11:
+          case 12:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 7]]);
+    }, _callee, null, [[0, 8]]);
   }));
 
   return function (_x, _x2) {

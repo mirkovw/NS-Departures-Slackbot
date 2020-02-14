@@ -15,6 +15,7 @@ export const handleCommand = async (payload) => {
     const user = await findUser(payload.user_id) !== undefined ? await findUser(payload.user_id) : await writeUser(newUser(payload));
     if (payload.command === '/ns') {
         const isSettings = payload.text.toLocaleLowerCase() === 'settings' || (payload.text === '' && user.station === 'NONE');
+        const responseType = isSettings ? 'ephemeral' : 'in_channel';
 
         if (isSettings) {
             log.info(`${user.userName} request settings`);
@@ -30,9 +31,8 @@ export const handleCommand = async (payload) => {
             }
         }
 
-        await respondCustom(payload.response_url, { response_type: isSettings ? 'ephemeral' : 'in_channel', blocks: msg.blocks });
         if (msgUpdate) await respondCustom(payload.response_url, { response_type: 'ephemeral', blocks: msgUpdate.blocks });
-        return true;
+        return { response_type: responseType, replace_original: false, blocks: msg.blocks };
     }
     return false;
 };

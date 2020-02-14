@@ -7,8 +7,8 @@ const router = new express.Router();
 router.post('/slack/commands/ns', async (req, res) => {
     try {
         const payload = req.body;
-        await handleCommand(payload);
-        return res.status(200).json(); // typical ack response
+        const response = await handleCommand(payload);
+        return res.status(200).send(response);
     } catch (err) {
         log.error(err);
         return res.status(500).send('Something blew up. We\'re looking into it.');

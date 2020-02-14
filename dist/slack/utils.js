@@ -25,7 +25,7 @@ function () {
   var _ref = _asyncToGenerator(
   /*#__PURE__*/
   regeneratorRuntime.mark(function _callee(payload) {
-    var msg, msgUpdate, user, isSettings, station, departures;
+    var msg, msgUpdate, user, isSettings, responseType, station, departures;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -61,73 +61,71 @@ function () {
             user = _context.t2;
 
             if (!(payload.command === '/ns')) {
-              _context.next = 38;
+              _context.next = 37;
               break;
             }
 
             isSettings = payload.text.toLocaleLowerCase() === 'settings' || payload.text === '' && user.station === 'NONE';
+            responseType = isSettings ? 'ephemeral' : 'in_channel';
 
             if (!isSettings) {
-              _context.next = 23;
+              _context.next = 24;
               break;
             }
 
             _utils.log.info("".concat(user.userName, " request settings"));
 
-            _context.next = 20;
+            _context.next = 21;
             return (0, _blocks.composeSettingsMsg)(user);
 
-          case 20:
+          case 21:
             msg = _context.sent;
-            _context.next = 32;
+            _context.next = 33;
             break;
 
-          case 23:
+          case 24:
             station = payload.text !== '' ? (0, _utils2.findStation)(payload.text) : (0, _utils2.findStation)(user.station);
 
             _utils.log.info("".concat(user.userName, " REQUEST DEPARTURES FOR ").concat(station.label.toUpperCase()));
 
-            _context.next = 27;
+            _context.next = 28;
             return (0, _utils2.getNsData)(station);
 
-          case 27:
+          case 28:
             departures = _context.sent;
-            _context.next = 30;
+            _context.next = 31;
             return (0, _blocks.composeDeparturesMsg)(user, station, departures);
 
-          case 30:
+          case 31:
             msg = _context.sent;
 
             if (station.label !== user.station) {
               msgUpdate = (0, _blocks.composeUpdateDefaultMsg)(user, station);
             }
 
-          case 32:
-            _context.next = 34;
-            return (0, _utils.respondCustom)(payload.response_url, {
-              response_type: isSettings ? 'ephemeral' : 'in_channel',
-              blocks: msg.blocks
-            });
-
-          case 34:
+          case 33:
             if (!msgUpdate) {
-              _context.next = 37;
+              _context.next = 36;
               break;
             }
 
-            _context.next = 37;
+            _context.next = 36;
             return (0, _utils.respondCustom)(payload.response_url, {
               response_type: 'ephemeral',
               blocks: msgUpdate.blocks
             });
 
-          case 37:
-            return _context.abrupt("return", true);
+          case 36:
+            return _context.abrupt("return", {
+              response_type: responseType,
+              replace_original: false,
+              blocks: msg.blocks
+            });
 
-          case 38:
+          case 37:
             return _context.abrupt("return", false);
 
-          case 39:
+          case 38:
           case "end":
             return _context.stop();
         }
