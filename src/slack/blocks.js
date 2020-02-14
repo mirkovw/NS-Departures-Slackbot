@@ -82,14 +82,18 @@ export const composeNotificationsModal = (user) => {
     for (let minute = 0; minute < 60; minute += 1) {
         const minuteObj = { text: { type: 'plain_text', text: minute.toString(), emoji: true }, value: minute.toString() };
         minuteOptionsArr.push(minuteObj);
-        if (user.notifications.time.minute === minute.toString()) initialMinuteOptionObj = minuteObj;
+        if (user.notifications.time.minute === minute.toString()) {
+            initialMinuteOptionObj = minuteObj;
+        }
     }
 
     view.blocks = blocksArr;
 
     // Days
     view.blocks[0].element.options = dayOptionsArr; // add day options array to message blocks
-    if (initialDayOptionsArr.length > 0) view.blocks[0].element.initial_options = initialDayOptionsArr; // add initial selected options if applicable
+    if (initialDayOptionsArr.length > 0) {
+        view.blocks[0].element.initial_options = initialDayOptionsArr;
+    } // add initial selected options if applicable
 
     // Hours
     view.blocks[1].element.options = hourOptionsArr; // add day options array to message blocks

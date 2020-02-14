@@ -1,14 +1,13 @@
 import express from 'express';
 import { log, findUser } from './utils';
-import { updateDefaultStation, updateNotifications, handleViewSubmission, clearNotifications } from './slack/actions';
-import slackCommand from './slack/commands';
+import { updateDefaultStation, updateNotifications, handleViewSubmission, clearNotifications, handleCommand } from './slack/utils';
 
 const router = new express.Router();
 
 router.post('/slack/commands/ns', async (req, res) => {
     try {
         const payload = req.body;
-        await slackCommand(payload);
+        await handleCommand(payload);
         return res.status(200).json(); // typical ack response
     } catch (err) {
         log.error(err);
@@ -29,7 +28,7 @@ router.post('/slack/actions', async (req, res) => {
         }
 
         if (payload.type === 'view_submission') {
-            handleViewSubmission(payload, user);
+            await handleViewSubmission(payload, user);
         }
         return res.status(200).json(); // typical ack response
     } catch (err) {

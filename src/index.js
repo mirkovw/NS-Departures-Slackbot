@@ -2,14 +2,16 @@ import '@babel/polyfill';
 import config from 'config';
 import express from 'express';
 import http from 'http';
-
 import bootstrap from './bootstrap';
 import { log } from './utils';
+import cronSchedule from './slack/cron';
 
 const app = express();
 
 app.start = async () => {
     log.info('Starting Server ...');
+
+    cronSchedule.start();
 
     const port = config.get('port');
     app.set('port', config.get('port'));
@@ -33,5 +35,3 @@ app.start = async () => {
 app.start().catch((err) => {
     log.error(err);
 });
-
-export default app;

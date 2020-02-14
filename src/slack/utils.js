@@ -1,7 +1,41 @@
 import config from 'config';
-import { findStation } from '../ns/utils';
-import { writeUser, log, respondCustom } from '../utils';
-import { composeUpdateDefaultConfirmMsg, composeNotificationsModal, composeSettingsMsg } from '../slack/blocks';
+import { findUser, log, newUser, respondCustom, writeUser } from '../utils';
+import { findStation, getNsData } from '../ns/utils';
+import {
+    composeDeparturesMsg,
+    composeNotificationsModal,
+    composeSettingsMsg,
+    composeUpdateDefaultConfirmMsg,
+    composeUpdateDefaultMsg,
+} from './blocks';
+
+export const handleCommand = async (payload) => {
+    let msg;
+    let msgUpdate;
+    const user = await findUser(payload.user_id) !== undefined ? await findUser(payload.user_id) : await writeUser(newUser(payload));
+    if (payload.command === '/ns') {
+        const isSettings = payload.text.toLocaleLowerCase() === 'settings' || (payload.text === '' && user.station === 'NONE');
+
+        if (isSettings) {
+            log.info(`${user.userName} request settings`);
+            msg = await composeSettingsMsg(user); // send settings page
+        } else {
+            const station = payload.text !== '' ? findStation(payload.text) : findStation(user.station);
+            log.info(`${user.userName} REQUEST DEPARTURES FOR ${station.label.toUpperCase()}`);
+            const departures = await getNsData(station);
+            msg = await composeDeparturesMsg(user, station, departures);
+
+            if (station.label !== user.station) {
+                msgUpdate = composeUpdateDefaultMsg(user, station);
+            }
+        }
+
+        await respondCustom(payload.response_url, { response_type: isSettings ? 'ephemeral' : 'in_channel', blocks: msg.blocks });
+        if (msgUpdate) await respondCustom(payload.response_url, { response_type: 'ephemeral', blocks: msgUpdate.blocks });
+        return true;
+    }
+    return false;
+};
 
 export const updateDefaultStation = async (payload, userParam) => {
     const user = userParam;
@@ -74,3 +108,21 @@ export const clearNotifications = async (payload, userParam) => {
     });
 };
 
+export const sendNotification = async (user) => {
+    log.info(`Sending notification to ${user.userName}`);
+    const station = findStation(user.station);
+    const departures = await getNsData(station);
+    const msg = await composeDeparturesMsg(user, station, departures);
+
+    try {
+        await respondCustom('https://slack.com/api/chat.postMessage', {
+            channel: user.userId,
+            text: 'Your daily NS Departures notification is ready to view.',
+            blocks: msg.blocks,
+        }, {
+            headers: { Authorization: `Bearer ${config.get('slack.botToken')}` },
+        });
+    } catch (err) {
+        log.error(err);
+    }
+};

@@ -1,10 +1,5 @@
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-
 require("@babel/polyfill");
 
 var _config = _interopRequireDefault(require("config"));
@@ -16,6 +11,8 @@ var _http = _interopRequireDefault(require("http"));
 var _bootstrap = _interopRequireDefault(require("./bootstrap"));
 
 var _utils = require("./utils");
+
+var _cron = _interopRequireDefault(require("./slack/cron"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -36,6 +33,8 @@ regeneratorRuntime.mark(function _callee() {
         case 0:
           _utils.log.info('Starting Server ...');
 
+          _cron["default"].start();
+
           port = _config["default"].get('port');
           app.set('port', _config["default"].get('port'));
           (0, _bootstrap["default"])(app);
@@ -54,7 +53,7 @@ regeneratorRuntime.mark(function _callee() {
           });
           server.listen(port);
 
-        case 8:
+        case 9:
         case "end":
           return _context.stop();
       }
@@ -64,5 +63,3 @@ regeneratorRuntime.mark(function _callee() {
 app.start()["catch"](function (err) {
   _utils.log.error(err);
 });
-var _default = app;
-exports["default"] = _default;

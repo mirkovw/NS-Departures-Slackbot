@@ -9,9 +9,7 @@ var _express = _interopRequireDefault(require("express"));
 
 var _utils = require("./utils");
 
-var _actions = require("./slack/actions");
-
-var _commands = _interopRequireDefault(require("./slack/commands"));
+var _utils2 = require("./slack/utils");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -42,7 +40,7 @@ function () {
             _context.prev = 0;
             payload = req.body;
             _context.next = 4;
-            return (0, _commands["default"])(payload);
+            return (0, _utils2.handleCommand)(payload);
 
           case 4:
             return _context.abrupt("return", res.status(200).json());
@@ -100,7 +98,7 @@ function () {
             }
 
             _context2.next = 10;
-            return (0, _actions.updateDefaultStation)(payload, user);
+            return (0, _utils2.updateDefaultStation)(payload, user);
 
           case 10:
             if (!(actions.action_id === 'updateNotifications')) {
@@ -109,7 +107,7 @@ function () {
             }
 
             _context2.next = 13;
-            return (0, _actions.updateNotifications)(payload, user);
+            return (0, _utils2.updateNotifications)(payload, user);
 
           case 13:
             if (!(actions.action_id === 'clearNotifications')) {
@@ -118,29 +116,34 @@ function () {
             }
 
             _context2.next = 16;
-            return (0, _actions.clearNotifications)(payload, user);
+            return (0, _utils2.clearNotifications)(payload, user);
 
           case 16:
-            if (payload.type === 'view_submission') {
-              (0, _actions.handleViewSubmission)(payload, user);
+            if (!(payload.type === 'view_submission')) {
+              _context2.next = 19;
+              break;
             }
 
+            _context2.next = 19;
+            return (0, _utils2.handleViewSubmission)(payload, user);
+
+          case 19:
             return _context2.abrupt("return", res.status(200).json());
 
-          case 20:
-            _context2.prev = 20;
+          case 22:
+            _context2.prev = 22;
             _context2.t0 = _context2["catch"](0);
 
             _utils.log.error(_context2.t0);
 
             return _context2.abrupt("return", res.status(500).send('Something blew up. We\'re looking into it.'));
 
-          case 24:
+          case 26:
           case "end":
             return _context2.stop();
         }
       }
-    }, _callee2, null, [[0, 20]]);
+    }, _callee2, null, [[0, 22]]);
   }));
 
   return function (_x3, _x4) {
