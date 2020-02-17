@@ -14,7 +14,10 @@ import {
 export const handleCommand = async (payload) => {
     let msg;
     let msgUpdate;
-    const user = await findUser(payload.user_id) !== undefined ? await findUser(payload.user_id) : await writeUser(newUser(payload));
+
+    let user = await findUser(payload.user_id);
+    if (user === undefined) user = await writeUser(newUser(payload));
+
     if (payload.command === '/ns') {
         const isSettings = payload.text.toLocaleLowerCase() === 'settings' || (payload.text === '' && user.station === 'NONE');
         const responseType = isSettings ? 'ephemeral' : 'in_channel';
@@ -79,7 +82,8 @@ export const handleViewSubmission = async (payload, userParam) => {
     user.notifications.enabled = true;
     user.notifications.days = [];
     for (let i = 0; i < values.days_select.days_select_value.selected_options.length; i += 1) {
-        user.notifications.days.push(values.days_select.days_select_value.selected_options[i].value);
+        const theVal = values.days_select.days_select_value.selected_options[i].value;
+        user.notifications.days.push(theVal);
     }
     user.notifications.time.hour = values.hour_select.hour_select_value.selected_option.value;
     user.notifications.time.minute = values.minute_select.minute_select_value.selected_option.value;

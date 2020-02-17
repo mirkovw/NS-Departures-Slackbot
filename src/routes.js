@@ -1,7 +1,11 @@
 import express from 'express';
 import { log, findUser } from './utils';
 import {
-    updateDefaultStation, updateNotifications, handleViewSubmission, clearNotifications, handleCommand,
+    updateDefaultStation,
+    updateNotifications,
+    handleViewSubmission,
+    clearNotifications,
+    handleCommand,
 } from './slack/utils';
 
 const router = new express.Router();
