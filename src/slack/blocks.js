@@ -185,7 +185,6 @@ export const composeDeparturesMsg = async (user, station, departures) => {
 
 export const composeUpdateDefaultMsg = (user, station) =>
 // construct and return message
-
     ({
         blocks: [
             {
@@ -215,8 +214,8 @@ export const composeUpdateDefaultMsg = (user, station) =>
             },
         ],
     });
-export const composeUpdateDefaultConfirmMsg = station =>
-    // construct and return message
+export const composeUpdateDefaultConfirmMsg = (station) =>
+// construct and return message
     ({
         blocks: [
             {

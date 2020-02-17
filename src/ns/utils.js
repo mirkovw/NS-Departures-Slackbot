@@ -65,4 +65,3 @@ export const findStation = (str) => {
 
     return resultsArr.reduce((acc, loc) => (acc.diff < loc.diff ? acc : loc));
 };
-

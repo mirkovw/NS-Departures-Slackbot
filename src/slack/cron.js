@@ -20,13 +20,13 @@ export default new CronJob('*/5 * * * *', async () => {
     const currentMinute = date.getMinutes();
 
     // filter out the users who should be receiving a notification
-    const result1 = usersData.filter(user => user.notifications.enabled === true);
+    const result1 = usersData.filter((user) => user.notifications.enabled === true);
 
-    const result2 = result1.filter(user => user.notifications.days.indexOf(currentDay.toString()) !== -1);
+    const result2 = result1.filter((user) => user.notifications.days.indexOf(currentDay.toString()) !== -1);
 
-    const result3 = result2.filter(user => user.notifications.time.hour === currentHour.toString());
+    const result3 = result2.filter((user) => user.notifications.time.hour === currentHour.toString());
 
-    const userList = result3.filter(user => Math.abs(user.notifications.time.minute - currentMinute) <= 2);
+    const userList = result3.filter((user) => Math.abs(user.notifications.time.minute - currentMinute) <= 2);
 
     for (let i = 0; i < userList.length; i += 1) {
         sendNotification(userList[i]);

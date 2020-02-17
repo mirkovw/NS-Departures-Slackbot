@@ -1,5 +1,7 @@
 import config from 'config';
-import { findUser, log, newUser, respondCustom, writeUser } from '../utils';
+import {
+    findUser, log, newUser, respondCustom, writeUser,
+} from '../utils';
 import { findStation, getNsData } from '../ns/utils';
 import {
     composeDeparturesMsg,

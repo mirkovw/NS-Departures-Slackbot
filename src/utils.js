@@ -49,7 +49,7 @@ export const writeUser = async (data) => {
     return true;
 };
 
-export const newUser = payload => ({
+export const newUser = (payload) => ({
     userId: payload.user_id,
     channelId: payload.channel_id,
     userName: payload.user_name,
@@ -82,4 +82,3 @@ export const respondCustom = async (url, options, params) => {
     }
     return result;
 };
-
