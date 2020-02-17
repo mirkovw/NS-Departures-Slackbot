@@ -9,7 +9,7 @@ import cronSchedule from './slack/cron';
 const app = express();
 
 app.start = async () => {
-    log.info('Starting Server ...');
+    log.info('Starting Server now...');
 
     cronSchedule.start();
 
