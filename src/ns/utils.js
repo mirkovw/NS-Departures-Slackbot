@@ -49,11 +49,13 @@ export const getNsData = async (station) => {
     }
 };
 
+const findSmallestDiff = (acc, loc) => (acc.diff < loc.diff ? acc : loc);
+
 export const findStation = (str) => {
     const resultsArr = [];
 
     for (let i = 0; i < stations.length; i += 1) {
-        const currentDifference = levenshteinDistance(str, stations[i].label);
+        const currentDifference = levenshteinDistance(str.toLowerCase(), stations[i].label.toLowerCase());
         resultsArr.push({
             diff: currentDifference,
             location: i,
@@ -63,5 +65,8 @@ export const findStation = (str) => {
         });
     }
 
-    return resultsArr.reduce((acc, loc) => (acc.diff < loc.diff ? acc : loc));
+    return resultsArr.reduce(findSmallestDiff);
+
+    // return reduction;
+    // return resultsArr.reduce((acc, loc) => (acc.diff < loc.diff ? acc : loc));
 };

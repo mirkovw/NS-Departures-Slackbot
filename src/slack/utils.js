@@ -56,7 +56,6 @@ export const updateDefaultStation = async (payload, userParam) => {
     });
 };
 
-
 export const updateNotifications = async (payload, userParam) => {
     let user = userParam;
     user.updateSettings.channelId = payload.container.channel_id;

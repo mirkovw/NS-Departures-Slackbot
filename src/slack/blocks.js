@@ -164,6 +164,15 @@ export const composeDeparturesMsg = async (user, station, departures) => {
         // append to fields array, which will be inserted into blocks message below
         msgFieldsArray.push(msgFieldsArrayValue);
     }
+    const headerText = station.diff === 0
+        ? `<@${user.userId}>, here are the upcoming train departures from *${station.label}*:`
+        : `<@${user.userId}>, did you mean *${station.label}*? Here are the upcoming train departures:`;
+
+    // if (station.diff === 0) {
+    //     `<@${user.userId}>, here are the upcoming train departures from *${station.label}*:`
+    // } else {
+    //     `<@${user.userId}>, did you mean *${station.label}*?`
+    // }
 
     // construct and return message
     return {
@@ -172,7 +181,7 @@ export const composeDeparturesMsg = async (user, station, departures) => {
                 type: 'section',
                 text: {
                     type: 'mrkdwn',
-                    text: `<@${user.userId}>, here are the upcoming train departures from *${station.label}*:`,
+                    text: headerText,
                 },
             },
             {
@@ -181,6 +190,8 @@ export const composeDeparturesMsg = async (user, station, departures) => {
             },
         ],
     };
+
+
 };
 
 export const composeUpdateDefaultMsg = (user, station) => (
